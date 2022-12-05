@@ -1,0 +1,31 @@
+body {
+    font-family: 'Rye', cursive;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+    background-color: #35654d;
+}
+
+#houseCards img {
+    height: 175px;
+    width: 125px;
+    margin: 1px;
+}
+
+#playerCards img {
+    height: 175px;
+    width: 125px;
+    margin: 1px;
+}
+
+#hitme {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+}
+
+#stay {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+}
