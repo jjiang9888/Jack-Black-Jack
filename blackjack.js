@@ -5,23 +5,23 @@ var houseAce = 0;
 var playerAce = 0; 
 
 var hiddenCard;
-var deck;                                           //Establish variables. 
+var deck;                                           //Establish variables
 
 var ableHit = true;                                //Define : Player can hit if sum of cards is <=21.
 
-window.onload = function() {                        //When browser window loads, start these functions. 
+window.onload = function() {                        //When browser window loads, start primary functions. 
     makeDeck();
     shuffle();
     gameStart();   
 }
 
 function makeDeck() {
-    let rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];   //values
+    let rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];     //values
     let suits = ["C", "D", "H", "S"];                                                  //types
     deck = [];
 
     for (let i = 0; i < suits.length; i++) {
-        for (let j = 0; j < rank.length; j++) {             //Nested for loop to create array of rank and suits cards. 
+        for (let j = 0; j < rank.length; j++) {      //Nested for loop to create array of rank and suits cards. 
             deck.push(rank[j] + "-" + suits[i]);
         }
     }
@@ -29,30 +29,30 @@ function makeDeck() {
 
 function shuffle() {
     for (let i = 0; i < deck.length; i++) {
-        let j = Math.floor(Math.random() * deck.length); // Fisher-Yates Algorithm to shuffle decks and randomize. 
-        let temp = deck[i];
+        let j = Math.floor(Math.random() * deck.length); //For each i in deck index, pick a j, swap the two.  
+        let x = deck[i];
         deck[i] = deck[j];
-        deck[j] = temp;
+        deck[j] = x;
     }
     console.log(deck);
 }
 
 function gameStart() {
-    hiddenCard = deck.pop();                            //Face down card pulled from array. 
-    houseSum += getValue(hiddenCard);                      //House sum increased but hidden. 
-    houseAce += checkAceCount(hiddenCard);                 //Checks hidden card for ace.
-    while (houseSum < 17) {                                     //While sum of house is less than 17, it will hit.  
+    hiddenCard = deck.pop();       //Face down card pulled from array. Set to hidden cardback in HTML by default. 
+    houseSum += getValue(hiddenCard);                   //House sum increased but hidden. 
+    houseAce += checkAceCount(hiddenCard);              //Checks hidden card for ace.
+    while (houseSum < 17) {                             //While sum of house is less than 17, it will continue to hit.Blackjack rule of soft 17.   
         let addCard = document.createElement("img");
         let card = deck.pop();                          //Create a new card element and pull from deck array. 
-        addCard.src = "./cards/" + card + ".png";
+        addCard.src = "./cards/" + card + ".png";       //Source is the cards directory. 
         houseSum += getValue(card);                     //House card sum increases again. 
         houseAce += checkAceCount(card);                //Check that card for Ace. 
-        document.getElementById("houseCards").append(addCard);        //Update dealer card div with 2nd card. 
+        document.getElementById("houseCards").append(addCard);//Update dealer card graphic in HTML with 2nd card. 
     }
     console.log(houseSum);
 
-    for (let i = 0; i < 2; i++) {                          //Player is dealt 2 cards, face up. 
-        let addCard = document.createElement("img");       //Mostly same process as house ^ 
+    for (let i = 0; i < 2; i++) {                          //For the player, get dealt 2 cards, no hidden.  
+        let addCard = document.createElement("img");       //Mostly same process as above.  
         let card = deck.pop();
         addCard.src = "./cards/" + card + ".png";
         playerSum += getValue(card);
@@ -61,16 +61,15 @@ function gameStart() {
     }
 
     console.log(playerSum);
-    document.getElementById("hitme").addEventListener("click", hitme);          //Add buttons for hitme and stay. 
+    document.getElementById("hitme").addEventListener("click", hitme);   //Add buttons for hitme and stay. 
     document.getElementById("stay").addEventListener("click", stay);
 
 }
 
 function hitme() {
     if (!ableHit) {
-        return;                                                             //If able to hit, just keep repeating process of adding cards. 
+        return;                    //If not able to hit, stops from going further. Otherwise, add cards. 
     }
-
     let addCard = document.createElement("img");
     let card = deck.pop();
     addCard.src = "./cards/" + card + ".png";
@@ -81,25 +80,23 @@ function hitme() {
     if (checkSum(playerSum, playerAce) > 21) {   //Check if player hand is >21, if true, no more hitting. 
         ableHit = false;
     }
-
 }
 
 function stay() {
-    houseSum = checkSum(houseSum, houseAce);                   //If this button was pressed, it means it's time to calc both sums. 
+    houseSum = checkSum(houseSum, houseAce);   //If this button was pressed, it means it's time to calc both sums. 
     playerSum = checkSum(playerSum, playerAce);
-
     ableHit = false;
-    document.getElementById("hiddenCard").src = "./cards/" + hiddenCard + ".png";
+    document.getElementById("hiddenCard").src = "./cards/" + hiddenCard + ".png";//Reveal hidden card.Change from default to new card png. 
 
-    let message = "";                                               //Define win conditions. 
+    let message = "";                                               //Define win conditions messages. 
     if (playerSum > 21) {
-        message = "You Lose!";                                      //Player >21. Player loses. 
+        message = "You Lose!";                                      //Player>21. Player loses. 
     }
     else if (houseSum > 21) {                                       //House>21. Player wins. 
         message = "You win!";
     }
     
-    else if (playerSum == houseSum) {                               //Tie. 
+    else if (playerSum == houseSum) {                               //Tie 
         message = "Tie!";
     }
     else if (playerSum > houseSum) {                                
@@ -113,7 +110,6 @@ function stay() {
     document.getElementById("playerSum").innerText = playerSum;
     document.getElementById("results").innerText = message;             //Shows result text. 
 }
-
 
 
 function getValue(card) {
@@ -137,7 +133,7 @@ function checkAceCount(card) {
 }
 
 function checkSum(playerSum, playerAce) {             //If playerSum of cards is higher than 21, and has an Ace,
-    while (playerSum > 21 && playerAce > 0) {          //reduce the player sum by 10 and ace by 1. Repeat if needed. 
+    while (playerSum > 21 && playerAce > 0) {         //Reduce the player sum by 10 and ace by 1. Repeat if needed. 
         playerSum -= 10;
         playerAce -= 1;
     }
